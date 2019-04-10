@@ -137,7 +137,7 @@
 
 	</dependencies>
 	<build>
-		<finalName>PTW-InfoManager</finalName>
+		<finalName>PTW-OCR</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
