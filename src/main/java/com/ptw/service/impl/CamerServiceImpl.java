@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.baidu.aip.ocr.AipOcr;
 import com.ptw.service.CameraService;
-import com.ptw.tools.PTWResult;
+import com.ptw.utils.PTWResult;
 import com.ptw.utils.PtwContracts;
 @Service
 public class CamerServiceImpl implements CameraService {

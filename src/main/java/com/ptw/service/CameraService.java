@@ -1,6 +1,6 @@
 package com.ptw.service;
 
-import com.ptw.tools.PTWResult;
+import com.ptw.utils.PTWResult;
 
 public interface CameraService {
 	public PTWResult idCard_front();
