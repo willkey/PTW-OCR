@@ -1,0 +1,34 @@
+server:
+  port: 7011
+  servlet:
+    session:
+      timeout:
+        7200
+  #SSL https证书配置
+  ssl: 
+    key-store: 1927045__51tour.com.pfx  #此文件放在/home/project/目录下
+    key-store-password: iup0w7Go
+spring:
+  thymeleaf: 
+    cache: false
+  datasource:
+    url: jdbc:mysql://10.10.130.16:3306/mini_qa
+    username: root
+    password: mysqladmin
+    driver-class-name: com.mysql.jdbc.Driver
+  #jackson: 
+   # date-format: yyyy-MM-dd
+  profiles: 
+    active: dev
+---
+spring:
+  profiles: dev #开发环境
+system-params: 
+  imagePath: E://image//
+  filePath: E://
+---
+spring:
+  profiles: release #开发环境
+system-params: 
+  imagePath: /home/wechat_image/
+  filePath: /home/file/
