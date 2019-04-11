@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -56,16 +57,16 @@ public class UploadController {
 	      //获取到当前的日期时间用户生成文件名防止文件名重复 
 	      String filedata=this.dates(); 
 	      //生成一个随机数来防止文件名重复 
-	      int x=(int)(Math.random()*1000); 
-	      filename="zhongshang"+x+filedata; 
-	      System.out.println(x); 
+	      //int x=(int)(Math.random()*1000); 
+//	      filename="zhongshang"+x+filedata;
+	      filename=UUID.randomUUID().toString();
 	      //将文件的地址和生成的文件名拼在一起 
 	      File file = new File(realPath,filename+"."+type); 
 	      multipartFile.transferTo(file); 
 	      //将图片在项目中的地址和isok状态储存为json格式返回给前台，由于公司项目中没有fastjson只能用这个 
 	      JSONObject jsonObject=new JSONObject(); 
 	      jsonObject.put("isok",1); 
-	      jsonObject.put("dizhi",realPath+filename+"."+type); 
+	      jsonObject.put("dizhi",filename+"."+type); 
 	      writer.write(jsonObject.toString()); 
 	    } catch (IOException e) { 
 	      e.printStackTrace(); 
