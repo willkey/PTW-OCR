@@ -13,10 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ptw.utils.PTWResult;
 import com.ptw.utils.SystemParams;
 
 @Controller
@@ -31,7 +33,8 @@ public class UploadController {
 	     return dateString; 
 	  } 
 	  @RequestMapping("wx_upload") 
-	  public void uploadPicture(HttpServletRequest request, HttpServletResponse response,PrintWriter writer) throws Exception { 
+	  @ResponseBody
+	  public PTWResult uploadPicture(HttpServletRequest request) { 
 	    System.out.println("进入get方法！"); 
 	  //获取从前台传过来得图片 
 	    MultipartHttpServletRequest req =(MultipartHttpServletRequest)request; 
@@ -55,10 +58,7 @@ public class UploadController {
 	        dir.mkdir(); 
 	      } 
 	      //获取到当前的日期时间用户生成文件名防止文件名重复 
-	      String filedata=this.dates(); 
-	      //生成一个随机数来防止文件名重复 
-	      //int x=(int)(Math.random()*1000); 
-//	      filename="zhongshang"+x+filedata;
+//	      String filedata=this.dates(); 
 	      filename=UUID.randomUUID().toString();
 	      //将文件的地址和生成的文件名拼在一起 
 	      File file = new File(realPath,filename+"."+type); 
@@ -67,11 +67,10 @@ public class UploadController {
 	      JSONObject jsonObject=new JSONObject(); 
 	      jsonObject.put("isok",1); 
 	      jsonObject.put("dizhi",filename+"."+type); 
-	      writer.write(jsonObject.toString()); 
-	    } catch (IOException e) { 
+	      return PTWResult.ok(jsonObject);
+	    } catch (Exception e) { 
 	      e.printStackTrace(); 
-	    } catch (IllegalStateException e) { 
-	      e.printStackTrace(); 
-	    } 
+	      return PTWResult.build(500, e.getMessage());
+	    }
 	}
 }
