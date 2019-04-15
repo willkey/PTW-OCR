@@ -28,5 +28,7 @@ public class TestOCR {
         JSONObject res = client.idcard(path, "front", new HashMap<String, String>());	//front前面
 //        JSONObject res = client.general(path, new HashMap<String, String>());
         System.out.println(res.toString(2));
+        JSONObject jsonObject = res.getJSONObject("words_result").getJSONObject("姓名");
+        System.out.println(jsonObject.get("words"));
 	}
 }
