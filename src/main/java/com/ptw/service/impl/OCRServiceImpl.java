@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.alibaba.druid.util.StringUtils;
 import com.baidu.aip.ocr.AipOcr;
 import com.ptw.pojo.IdCard;
+import com.ptw.pojo.IdCardback;
 import com.ptw.service.OCRService;
 import com.ptw.utils.PTWResult;
 import com.ptw.utils.PtwContracts;
@@ -15,19 +16,12 @@ import com.ptw.utils.PtwContracts;
 public class OCRServiceImpl implements OCRService {
 	AipOcr client = new AipOcr(PtwContracts.BAIDU_APP_ID, PtwContracts.BAIDU_API_KEY, PtwContracts.BAIDU_SECRET_KEY);
 	@Override
-	public PTWResult idcard(String imagePath, String type) {//type:front正面
+	public PTWResult idcard(String imagePath, String type) {//type:front正面    type:back反面
         // 可选：设置网络连接参数
         client.setConnectionTimeoutInMillis(2000);
         client.setSocketTimeoutInMillis(60000);
-        JSONObject res = client.idcard(imagePath, type, new HashMap<String, String>());	//front前面
-        JSONObject obj = res.getJSONObject("words_result");
-        IdCard idCard = new IdCard();
-        idCard.setName(obj.getJSONObject("姓名").getString("words"));
-        idCard.setNation(obj.getJSONObject("民族").getString("words"));
-        idCard.setAddress(obj.getJSONObject("住址").getString("words"));
-        idCard.setIdNo(obj.getJSONObject("公民身份号码").getString("words"));
-        idCard.setBirthday(obj.getJSONObject("出生").getString("words"));
-        idCard.setSex(obj.getJSONObject("性别").getString("words"));
+        JSONObject res = client.idcard(imagePath, type, null);	//front前面
+        
         /**
          *  normal-识别正常
 			reversed_side-未摆正身份证
@@ -50,7 +44,28 @@ public class OCRServiceImpl implements OCRService {
         		return PTWResult.build(500, "上传的图片中不包含身份证");
         	}
         }
-		return PTWResult.ok(idCard);
+        /**
+         * 正常根据身份证类型赋值
+         * */
+        JSONObject obj = res.getJSONObject("words_result");
+        if("front".equals(type)){
+        	 IdCard idCard = new IdCard();
+             idCard.setName(obj.getJSONObject("姓名").getString("words"));
+             idCard.setNation(obj.getJSONObject("民族").getString("words"));
+             idCard.setAddress(obj.getJSONObject("住址").getString("words"));
+             idCard.setIdNo(obj.getJSONObject("公民身份号码").getString("words"));
+             idCard.setBirthday(obj.getJSONObject("出生").getString("words"));
+             idCard.setSex(obj.getJSONObject("性别").getString("words"));
+     		return PTWResult.ok(idCard);
+        }else{
+        	IdCardback idCardback = new IdCardback();
+        	idCardback.setStartDate(obj.getJSONObject("签发日期").getString("words"));
+        	idCardback.setAuthority(obj.getJSONObject("签发机关").getString("words"));
+        	idCardback.setEndDate(obj.getJSONObject("失效日期").getString("words"));
+        	return PTWResult.ok(idCardback);
+        }
+        
+       
 	}
 
 }
