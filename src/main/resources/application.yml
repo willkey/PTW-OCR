@@ -15,24 +15,32 @@ spring:
       max-file-size: 30MB
   thymeleaf: 
     cache: false
-  datasource:
-    url: jdbc:mysql://10.10.130.16:3306/mini_qa
-    username: root
-    password: mysqladmin
-    driver-class-name: com.mysql.jdbc.Driver
-  #jackson: 
-   # date-format: yyyy-MM-dd
   profiles: 
     active: dev
+jasypt:
+  encryptor:
+    password: EbfYkitulv73I2p0mXI50JMXoaxZTKJ7
 ---
 spring:
   profiles: dev #开发环境
+  datasource: 
+    url: jdbc:sqlserver://172.16.2.239:1433;Databasename=RealTourR8-test
+    username: realtour
+    password: ENC(VHSycrGLNcB7FexErFJNr006JGcDsL/P)
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    connection-timeout: 1800000
 system-params: 
   imagePath: E://image//
   filePath: E://
 ---
 spring:
-  profiles: release #开发环境
+  profiles: release #生产环境
+  datasource: 
+    url: jdbc:sqlserver://172.16.2.239:1433;Databasename=RealTourR8
+    username: realtour
+    password: ENC(VHSycrGLNcB7FexErFJNr006JGcDsL/P)
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    connection-timeout: 1800000
 system-params: 
   imagePath: /home/wechat_image/
   filePath: /home/file/
