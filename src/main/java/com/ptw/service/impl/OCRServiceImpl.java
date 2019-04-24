@@ -9,6 +9,7 @@ import com.alibaba.druid.util.StringUtils;
 import com.baidu.aip.ocr.AipOcr;
 import com.ptw.pojo.IdCard;
 import com.ptw.pojo.IdCardback;
+import com.ptw.pojo.passport;
 import com.ptw.service.OCRService;
 import com.ptw.utils.PTWResult;
 import com.ptw.utils.PtwContracts;
@@ -66,6 +67,54 @@ public class OCRServiceImpl implements OCRService {
         }
         
        
+	}
+	@Override
+	public PTWResult passport(String imagePath) {
+		// 可选：设置网络连接参数
+        client.setConnectionTimeoutInMillis(2000);
+        client.setSocketTimeoutInMillis(60000);
+        JSONObject res = client.passport(imagePath, null);
+        System.err.println(res);
+        /*错误信息
+         * */
+        String status=null;
+        try {
+        	status=res.getString("error_msg");
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+        if("target detect error".equals(status)){
+        	return PTWResult.build(500, "未检测到护照");
+        }
+        /**
+         * 当识别正确时返回对象
+         */
+        JSONObject obj = res.getJSONObject("words_result");
+        passport passport = new passport();
+        /**
+         *              private String name;//姓名
+						private String issuePlace;//护照签发地点
+						private String PassportNumber;//护照号码
+						private String issueDate;//签发日期
+						private String birthPlace;//出生地点
+						private String birthday;//生日
+						private String countryCode;//国家码
+						private String valid;//有效期至
+						private String englishName;//姓名拼音
+						private String sex;//性别
+         * */
+        passport.setName(obj.getJSONObject("姓名").getString("words"));
+        passport.setIssuePlace(obj.getJSONObject("护照签发地点").getString("words"));
+        passport.setPassportNumber(obj.getJSONObject("护照号码").getString("words"));
+        passport.setIssueDate(obj.getJSONObject("签发日期").getString("words"));
+        passport.setBirthPlace(obj.getJSONObject("出生地点").getString("words"));
+        passport.setBirthday(obj.getJSONObject("生日").getString("words"));
+        passport.setCountryCode(obj.getJSONObject("国家码").getString("words"));
+        passport.setValid(obj.getJSONObject("有效期至").getString("words"));
+        passport.setEnglishName(obj.getJSONObject("姓名拼音").getString("words"));
+        passport.setSex(obj.getJSONObject("性别").getString("words"));
+		// TODO Auto-generated method stub
+        return PTWResult.ok(passport);
 	}
 
 }
