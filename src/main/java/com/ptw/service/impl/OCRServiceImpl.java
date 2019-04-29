@@ -115,6 +115,20 @@ public class OCRServiceImpl implements OCRService {
 		 * countryCode;//国家码 private String valid;//有效期至 private String
 		 * englishName;//姓名拼音 private String sex;//性别
 		 */
+		
+		// 先处理信息
+		try {
+			passport.setIssueDate(Dateconversion(obj.getJSONObject("签发日期").getString("words")));
+			passport.setBirthday(DateBirthday(obj.getJSONObject("生日").getString("words")));
+			passport.setValid(Dateconversion(obj.getJSONObject("有效期至").getString("words")));
+		} catch (Exception e) {
+			// TODO: handle exception
+			passport.setIssueDate("");
+			passport.setBirthday("");
+			passport.setValid("");
+		}
+		// TODO Auto-generated method stub
+		// 无异常接着处理
 		passport.setName(obj.getJSONObject("姓名").getString("words"));
 		passport.setIssuePlace(obj.getJSONObject("护照签发地点").getString("words"));
 		passport.setPassportNumber(obj.getJSONObject("护照号码").getString("words"));
@@ -122,14 +136,6 @@ public class OCRServiceImpl implements OCRService {
 		passport.setCountryCode(obj.getJSONObject("国家码").getString("words"));
 		passport.setEnglishName(obj.getJSONObject("姓名拼音").getString("words"));
 		passport.setSex(obj.getJSONObject("性别").getString("words"));
-		// 以下需要处理一下
-		passport.setIssueDate(Dateconversion(obj.getJSONObject("签发日期").getString("words")));
-
-		passport.setBirthday(DateBirthday(obj.getJSONObject("生日").getString("words")));
-
-		passport.setValid(Dateconversion(obj.getJSONObject("有效期至").getString("words")));
-
-		// TODO Auto-generated method stub
 		return PTWResult.ok(passport);
 	}
 

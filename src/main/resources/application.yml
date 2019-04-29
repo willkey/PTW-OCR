@@ -6,8 +6,8 @@ server:
         7200
   #SSL https证书配置
   ssl: 
-   key-store: 1927045__51tour.com.pfx  #此文件放在/home/project/目录下
-   key-store-password: iup0w7Go
+    key-store: 1927045__51tour.com.pfx  #此文件放在/home/project/目录下
+    key-store-password: iup0w7Go
 spring:
   servlet:
     multipart:

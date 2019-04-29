@@ -19,7 +19,7 @@ import lombok.Data;
 public class passport {
 	private String name;//姓名
 	private String issuePlace;//护照签发地点
-	private String PassportNumber;//护照号码
+	private String passportNumber;//护照号码
 	private String issueDate;//签发日期
 	private String birthPlace;//出生地点
 	private String birthday;//生日
