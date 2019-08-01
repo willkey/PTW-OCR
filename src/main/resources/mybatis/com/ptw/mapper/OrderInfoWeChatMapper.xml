@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ptw.mapper.OrderInfoWeChatMapper">
+	<!--证照系统小程序相关 @author hanwei-->
+
+	 
+	<select id="getOrderByMobile" resultType="com.ptw.pojo.OrderInfoWeChat">
+		SELECT
+			o.ProjectId AS projectId,
+			p.ProjectCode AS projectCode,
+			o.CreateDate AS createDate,
+			p.ProjectCloseStatus AS projectCloseStatus,
+			o.OrderId AS orderId 
+		FROM
+			OrderInfo o,
+			Project p 
+		<where>
+			p.ProjectID= o.ProjectId 
+			AND o.CreateUserId = ( SELECT EmployeeID FROM SysEmployeebasicinfo WHERE mobile = #{ mobile } ) 
+			<if test="projectCode!=null and projectCode!='' ">
+				AND projectCode like '%${projectCode}%'
+			</if>
+		</where>	
+		ORDER BY
+			createDate DESC
+    </select>
+
+</mapper>

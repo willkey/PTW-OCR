@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ptw.mapper.VisitorInfoWeChatMapper">
+	<!--证照系统小程序相关 @author hanwei-->
+	 
+	<select id="getVisitorByOrderId" resultType="com.ptw.pojo.VisitorInfoWeChat">
+		SELECT
+			ov.OrderVisitorId AS orderVisitorId,
+			ov.VisitorName AS visitorName,
+			ov.MobilePhone AS mobilePhone,
+			( SELECT OrderVisitorCredentialId FROM OrderVisitorCredential WHERE OrderVisitorId = ov.OrderVisitorId AND CredentialType = 2 ) AS passportID,
+			( SELECT CredentialCode FROM OrderVisitorCredential WHERE OrderVisitorId = ov.OrderVisitorId AND CredentialType = 2 ) AS passport,
+			( SELECT OrderVisitorCredentialId FROM OrderVisitorCredential WHERE OrderVisitorId = ov.OrderVisitorId AND CredentialType = 1 ) AS idCardID,
+			( SELECT CredentialCode FROM OrderVisitorCredential WHERE OrderVisitorId = ov.OrderVisitorId AND CredentialType = 1 ) AS idCard 
+		FROM
+			OrderVisitor ov 
+		<where>
+			BaseOrderId = #{orderId} 
+			<if test="visitorName!=null and visitorName!='' ">
+				AND visitorName like '%${visitorName}%'   
+			</if>
+			<if test="mobilePhone!=null and mobilePhone!='' ">
+				AND mobilePhone like '%${mobilePhone}%'
+			</if>
+		</where>
+    </select>
+
+</mapper>
